@@ -1,1 +1,16 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/Or4Way.hdl
+//Chip Name: Or4Way
+
+CHIP Or4Way {
+   IN a, b, c, d;
+   OUT out;
+
+   PARTS:
+   //A OR B
+   Or(a=a, b=b, out=AorB);
+
+   //C OR D
+   Or(a=c, b=d, out=CorD);
+
+   //(A OR B) OR (C OR D)
+   Or(a=AorB, b=CorD, out=out);
+}

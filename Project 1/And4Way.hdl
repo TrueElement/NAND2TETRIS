@@ -1,1 +1,20 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/And4Way.hdl
+//Chip Name: And4Way
+//
+
+CHIP And4Way {
+	IN a, b, c, d;
+	OUT out;
+	
+	PARTS:
+	
+	//And a,b
+	Nand(a=a, b=b, out=notPart1);
+	Nand(a=notPart1, b=notPart1, out=part1);
+	//And c,d
+	Nand(a=c, b=d, out=notPart2);
+	Nand(a=notPart2, b=notPart2, out=part2);
+	
+	//And a,b by c,d
+	Nand(a=part1, b=part2, out=notPart3);
+	Nand(a=notPart1, b=notPart2, out=out);
+}

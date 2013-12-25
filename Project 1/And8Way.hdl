@@ -1,1 +1,35 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/And8Way.hdl
+//Chip Name: And8Way
+
+CHIP And8Way {
+   IN a, b, c, d, e, f, g, h;
+   OUT out;
+
+   PARTS:
+   //A AND B
+   Nand(a=a, b=b, out=notAandB);
+   Nand(a=notAandB, b=notAandB, out=AandB);
+
+   //C AND D
+   Nand(a=c, b=d, out=notCandD);
+   Nand(a=notCandD, b=notCandD, out=CandD);
+
+   //E AND F
+   Nand(a=e, b=f, out=notEandF);
+   Nand(a=notEandF, b=notEandF, out=EandF);
+
+   //G AND H
+   Nand(a=g, b=h, out=notGandH);
+   Nand(a=notGandH, b=notGandH, out=GandH);
+
+   //(A AND B) AND (C AND D)
+   Nand(a=AandB, b=CandD, out=notABandCD);
+   Nand(a=notABandCD, b=notABandCD, out=ABandCD);
+
+   //(E AND F) AND (G AND H)
+   Nand(a=EandF, b=GandH, out=notEFandGH);
+   Nand(a=notEFandGH, b=notEFandGH, out=EFandGH);
+
+   //((A AND B) AND (C AND D)) AND ((E AND F) AND (G AND H))
+   Nand(a=ABandCD, b=EFandGH, out=notABCDandEFGH);
+   Nand(a=notABCDandEFGH, b=notABCDandEFGH, out=out);
+}

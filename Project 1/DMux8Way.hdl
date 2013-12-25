@@ -1,1 +1,65 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/DMux8Way.hdl
+/**
+ * 8-way demultiplexor.  
+ * {a,b,c,d,e,f,g,h} = {in,0,0,0,0,0,0,0} if sel == 000 A
+ *                     {0,in,0,0,0,0,0,0} if sel == 001 B
+ *                     {0,0,in,0,0,0,0,0} if sel == 010 C
+ *                     {0,0,0,in,0,0,0,0} if sel == 011 D
+ *                     {0,0,0,0,in,0,0,0} if sel == 100 E
+ *                     {0,0,0,0,0,in,0,0} if sel == 101 F
+ *                     {0,0,0,0,0,0,in,0} if sel == 110 G
+ *                     {0,0,0,0,0,0,0,in} if sel == 111 H
+ */
+
+
+CHIP DMux8Way {
+    IN in, sel[3];
+    OUT a, b, c, d, e, f, g, h;
+
+    PARTS:
+    //Get Not Sel
+    Nand(a=sel[0], b=sel[0], out=notSel0);
+    Nand(a=sel[1], b=sel[1], out=notSel1);
+    Nand(a=sel[2], b=sel[2], out=notSel2);
+
+    //Output A
+    //(~sel0 AND IN) AND (~sel1 AND IN) AND (~sel2 AND IN)
+    And(a=notSel0, b=in, out=notSel0andIn);
+    And(a=notSel1, b=in, out=notSel1andIn);
+    And(a=notSel2, b=in, out=notSel2andIn);
+    And(a=notSel0andIn, b=notSel1andIn, out=notSel01andIn);
+    And(a=notSel2andIn, b=notSel01andIn, out=a);
+
+    //Output B
+    //(sel0 AND IN) AND (~sel1 AND IN) AND (~sel2 AND IN)
+    And(a=sel[0], b=in, out=sel0andIn);
+    And(a=notSel1andIn, b=sel0andIn, out=notSel1andInANDsel0andIn);
+    And(a=notSel1andInANDsel0andIn, b=notSel2andIn, out=b);
+
+    //Output C
+    //(~sel0 and IN) AND (sel1 AND IN) AND (~sel2 AND IN)
+    And(a=sel[1], b=in, out=sel1andIn);
+    And(a=notSel0andIn, b=sel1andIn, out=notSel0andInANDsel1andIn);
+    And(a=notSel2andIn, b=notSel0andInANDsel1andIn, out=c);
+
+    //Output D
+    //(sel0 and IN) AND (sel1 AND IN) AND (~sel2 AND IN)
+    And(a=sel0andIn, b=sel1andIn, out=sel0andInANDsel1andIn);
+    And(a=notSel2andIn, b=sel0andInANDsel1andIn, out=d);
+
+    //Output E
+    //(~sel0 AND IN) AND (~sel1 AND IN) AND (sel2 AND IN)
+    And(a=sel[2], b=in, out=sel2andIn);
+    And(a=notSel01andIn, b=sel2andIn, out=e);
+
+    //Output F
+    //(sel0 AND IN) AND (~sel1 AND IN) AND (sel2 AND IN)
+    And(a=notSel1andInANDsel0andIn, b=sel2andIn, out=f);
+
+    //Output G
+    //(~sel0 AND IN) AND (sel1 AND IN) AND (sel2 AND IN)
+    And(a=notSel0andInANDsel1andIn, b=sel2andIn, out=g);
+
+    //Output H
+    //(sel0 AND IN) AND (sel1 AND IN) AND (sel2 AND IN)
+    And(a=sel0andInANDsel1andIn, b=sel2andIn, out=h);
+}

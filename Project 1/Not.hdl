@@ -1,1 +1,12 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/Not.hdl
+//Chip Name: Not
+// Not 0 = 1
+//Not 1 = 0
+
+
+CHIP Not {
+   IN in;
+   OUT out;
+
+   PARTS:
+   Nand(a=in, b=in, out=out);
+}

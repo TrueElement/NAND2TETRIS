@@ -1,1 +1,21 @@
-/mnt/Shared/Sources/nand2tetris/Project 2/HalfAdder.hdl
+/*
+*Chip Name: HalfAdder
+*A B carry sum
+*0 0   0    0
+*0 1   0    1
+*1 0   0    1
+*1 1   1    0
+*/
+
+CHIP HalfAdder {
+   IN a, b;
+   OUT carry, sum;
+
+   PARTS:
+   //Carry Output
+   //A AND B
+   And(a=a, b=b, out=carry);
+
+   //Sum Output
+   Xor(a=a, b=b, out=sum);
+}

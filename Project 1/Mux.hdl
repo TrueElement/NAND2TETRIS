@@ -1,1 +1,24 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/Mux.hdl
+/** 
+ * Multiplexor. If sel == 1 then out = b else out = a.
+ */
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+	//~sel AND A
+	Nand(a=sel, b=sel, out=notSel);
+	Nand(a=notSel, b=a, out=notSelNandA);
+	Nand(a=notSelNandA, b=notSelNandA, out=notSelAndA);
+	
+	//sel AND B
+	Nand(a=sel, b=b, out=selNandB);
+	Nand(a=selNandB, b=selNandB, out=selAndB);
+	
+	//~sel and A OR sel AND B
+	//OR as NAND: ((A NAND A) NAND (B NAND B)
+	Nand(a=notSelAndA, b=notSelAndA, out=OR1); //A NAND A
+	Nand(a=selAndB, b=selAndB, out=OR2); //B NAND B
+	Nand(a=OR1, b=OR2, out=out);// (A NAND A) NAND (B NAND B)
+}

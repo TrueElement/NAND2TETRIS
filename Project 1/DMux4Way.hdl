@@ -1,1 +1,37 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/DMux4Way.hdl
+/**
+ * 4-way demultiplexor.  
+ * {a,b,c,d} = {in,0,0,0} if sel == 00
+ *             {0,in,0,0} if sel == 01
+ *             {0,0,in,0} if sel == 10
+ *             {0,0,0,in} if sel == 11
+ */
+
+
+CHIP DMux4Way {
+    IN in, sel[2];
+
+    OUT a, b, c, d;
+
+    PARTS:
+    //Get Not Sel[0] and Not Sel[1]
+    Nand(a=sel[0], b=sel[0], out=notSel0);
+    Nand(a=sel[1], b=sel[1], out=notSel1);
+
+    //Output A
+    //(~sel0 AND IN) AND (~sel1 AND IN);
+    And(a=notSel0, b=in, out=notSel0andIn);
+    And(a=notSel1, b=notSel0andIn, out=a);
+
+    //Output B
+    //(sel0 AND IN) AND (~sel1 AND IN)
+    And(a=sel[0], b=in, out=sel0andIn);
+    And(a=notSel1, b=sel0andIn, out=b);
+
+    //Output C
+    //(~sel0 AND IN) AND (sel1 AND IN)
+    And(a=sel[1], b=notSel0andIn, out=c);
+    
+    //Output D
+    //(sel0 AND IN) AND (sel1 AND IN)
+    And(a=sel[1], b=sel0andIn, out=d);
+}

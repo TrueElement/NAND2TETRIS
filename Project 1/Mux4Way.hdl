@@ -1,1 +1,11 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/Mux4Way.hdl
+//Chip Name: Mux4Way
+
+CHIP Mux4Way {
+	IN a, b, c, d, sel[2];
+	OUT out;
+	
+	PARTS:
+	Mux(a=a, b=b, sel=sel[0], out=pass1);
+	Mux(a=c, b=d, sel=sel[0], out=pass2);
+	Mux(a=pass1, b=pass2, sel=sel[1], out=out);	
+}

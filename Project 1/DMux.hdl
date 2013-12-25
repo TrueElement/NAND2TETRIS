@@ -1,1 +1,18 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/DMux.hdl
+//Chip Name: DMux
+
+CHIP DMux {
+   IN in, sel;
+   OUT a, b;
+   
+   PARTS:
+   //Get ~Sel
+   Nand(a=sel, b=sel, out=notsel);
+
+   //Compute ~sel & A
+   Nand(a=notsel, b=in, out=notselNandA);
+   Nand(a=notselNandA, b=notselNandA, out=a);
+
+   //Compute sel & b
+   Nand(a=sel, b=in, out=selNandB);
+   Nand(a=selNandB, b=selNandB, out=b);
+}

@@ -1,1 +1,14 @@
-/mnt/Shared/Sources/nand2tetris/Project 1/Xor.hdl
+//Chip Name: Xor
+// If a Xor B
+
+CHIP Xor {
+   IN a, b;
+   OUT out;
+   PARTS:
+   Nand(a=a, b=a, out=notA);
+   Nand(a=b, b=b, out=notB);
+   Nand(a=notA, b=b, out=part1);
+   Nand(a=a, b=notB, out=part2);
+   Nand(a=part1, b=part2, out=out);
+
+}
