@@ -48,5 +48,35 @@ Full Adder - COMPLETE
 </li><li>
 16 bit Incrementer - COMPLETE
 </li><li>
-Arithmetic Logic Unit (ALU) - INCOMPLETE
+Arithmetic Logic Unit (ALU) - COMPLETE
 </li></ul>
+
+Project 3
+=========
+<ul><li>
+Bit - COMPLETE
+</li><li>
+Register - COMPLETE
+</li><li>
+RAM8 - COMPLETE
+</li><li>
+RAM64 - COMPLETE
+</li><li>
+RAM512 - COMPLETE
+</li><li>
+RAM4K - COMPLETE
+</li><li>
+RAM16K - COMPLETE
+</li><li>
+PC - INCOMPLETE
+</ul></li>
+
+Project 4
+=========
+<ul><li>
+</ul></li>
+
+Project 5
+=========
+<ul><li>
+</ul></li>

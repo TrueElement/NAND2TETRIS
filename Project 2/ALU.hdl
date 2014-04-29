@@ -1,0 +1,52 @@
+// if (zx  == 1) sets x = 0        // 16-bit constant
+// if (nx  == 1) sets x = ~x       // bitwise "not"
+// if (zy  == 1) sets y = 0        // 16-bit constant
+// if (ny  == 1) sets y = ~y       // bitwise "not"
+// if (f   == 1) sets out = x + y  // integer 2's-complement addition
+// if (f   == 0) sets out = x & y  // bitwise And
+// if (no  == 1) sets out = ~out   // bitwise Not
+// if (out == 0) sets zr = 1
+// if (out < 0)  sets ng = 1
+
+  
+CHIP ALU {
+    IN  
+        x[16], y[16],  // 16-bit inputs        
+        zx, // zero the x input?
+        nx, // negate the x input?
+        zy, // zero the y input?
+        ny, // negate the y input?
+        f,  // compute  out = x + y (if f == 1) or out = x & y (if == 0)
+        no; // negate the out output?
+
+    OUT 
+        out[16], // 16-bit output
+        zr, // 1 if (out == 0), 0 otherwise
+        ng; // 1 if (out < 0),  0 otherwise
+
+    PARTS:
+    //Mux(a= , b=, sel=, out=);
+    //Mux4Way(a=, b=, c=, d=, sel=sel[], out=);
+    //Mux8Way(a=, b=, c=, d=, e=, f=, g=, h=, sel=sel[], out=);
+    Not16(in=x, out=notx);
+    Not16(in=y, out=noty);
+    
+    //sel[0]  |  sel[1]  | out    |  zx  |  nx  | out |
+    //  0     |     0    |  a     |  0   |  0   |  x  |
+    //  0     |     1    |  b     |  0   |  1   | !x  |
+    //  1     |     0    |  c     |  1   |  0   |  0  |
+    //  1     |     1    |  d     |  1   |  1   |  1  |
+    Mux4Way16(a=x, b=notx, c=false, d=true, sel[0]=nx, sel[1]=zx, out=selectedx);
+
+    Mux4Way16(a=y, b=noty, c=false, d=true, sel[0]=ny, sel[1]=zy, out=selectedy);
+    And16(a=selectedx, b=selectedy, out=xandy);
+    Add16(a=selectedx, b=selectedy, out=xplusy);
+    Not16(in=xandy, out=notxandy);
+    Not16(in=xplusy, out=notxplusy);
+    Mux4Way16(a=xandy, b=notxandy, c=xplusy, d=notxplusy, sel[0]=no, sel[1]=f, out=selectedout);
+    Or16(a=selectedout, b=false, out=out);
+    Or16Way(in=selectedout, out=notzr);
+    Not(in=notzr, out=zr);
+    And16(a=selectedout, b[15]=true, b[0..14]=false, out=negand);
+    Or16Way(in=negand, out=ng);
+}
